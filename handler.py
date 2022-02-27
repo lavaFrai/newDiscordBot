@@ -32,3 +32,4 @@ def main(client):
         if _message.startswith(_prefix) or (client.user == ctx.mentions[0] if len(ctx.mentions) > 0 else False):
             info(f"Parsing command {'SUDO' if _superuser else ''}...")
             # executing command
+            await ctx.reply(f"Debug: executing your command (Text: \"{None}\") {'with' if _superuser else 'without'} superuser rules")
