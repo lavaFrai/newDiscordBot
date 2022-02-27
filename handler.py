@@ -29,6 +29,6 @@ def main(client):
         _message = str(ctx.content)
         _superuser = checkForSudo(ctx)
 
-        if _message.startswith(_prefix) or (client.user == ctx.mentions[0] if len(ctx.mentions > 0) else False):
+        if _message.startswith(_prefix) or (client.user == ctx.mentions[0] if len(ctx.mentions) > 0 else False):
             info(f"Parsing command {'SUDO' if _superuser else ''}...")
             # executing command
