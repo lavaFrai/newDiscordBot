@@ -19,17 +19,20 @@ def main(client):
 
     @client.event
     async def on_message(ctx):
-        info(f"{time.asctime()} > "
-             f"Message from server \"{ctx.guild.name}\" "
-             f"in channel \"{ctx.channel.name}\" "
-             f"by \"{ctx.author.name}#{ctx.author.discriminator}\" "
-             f"content: \"{ctx.content}\"")
+        if debug:
+            info(f"{time.asctime()} > "
+                 f"Message from server \"{ctx.guild.name}\" "
+                 f"in channel \"{ctx.channel.name}\" "
+                 f"by \"{ctx.author.name}#{ctx.author.discriminator}\" "
+                 f"content: \"{ctx.content}\"")
 
         _prefix = getServerPrefix(ctx)
         _message = str(ctx.content)
         _superuser = checkForSudo(ctx)
 
-        if _message.startswith(_prefix) or (client.user == ctx.mentions[0] if len(ctx.mentions) > 0 else False):
-            info(f"Parsing command {'SUDO' if _superuser else ''}...")
+        if _message.startswith(_prefix) or _message.startswith(f"<@!{client.user.id}>"):
             # executing command
-            await ctx.reply(f"Debug: executing your command (Text: \"{None}\") {'with' if _superuser else 'without'} superuser rules")
+            _command = parseCommand(ctx)
+            if debug:
+                await ctx.reply(f"Debug: executing your command (Text: \"{_command}\") {'with' if _superuser else 'without'} superuser rules")
+
