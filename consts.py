@@ -1,3 +1,3 @@
 defaultPrefix = "!"
-debug = True
+debug = False
 whitespaces = [' ', '\t']

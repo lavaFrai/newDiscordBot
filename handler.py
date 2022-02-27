@@ -33,6 +33,7 @@ def main(client):
         _prefix = getServerPrefix(ctx)
         _message = str(ctx.content)
         _superuser = checkForSudo(ctx)
+        _realtext = getRealMessageText(ctx)
 
         if _message.startswith(_prefix) or _message.startswith(f"<@!{client.user.id}>"):
             # executing command

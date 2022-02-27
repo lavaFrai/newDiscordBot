@@ -12,6 +12,10 @@ def databaseGet(query):
     return cursor.fetchall()
 
 
+def prepareForDatabase(text: str):
+    return text.replace('\\', '\\\\').replace('"', '\\"')
+
+
 def databaseSend(query):
     cursor.execute(query)
     database.commit()
@@ -61,3 +65,32 @@ def parseCommand(ctx):
         rPtr += 1
 
     return message[lPtr:rPtr]
+
+
+def getRealMessageText(ctx):
+    message = str(ctx.content)
+    lPtr = 0
+    _prefix = getServerPrefix(ctx)
+
+    # skipping prefix
+    if message.startswith(_prefix):
+        lPtr = len(_prefix)
+    else:
+        lPtr = message.find('>') + 1
+    if lPtr >= len(message):
+        return ""
+
+    # skipping whitespace
+    while (lPtr < len(message)) and (message[lPtr] in whitespaces):
+        lPtr += 1
+
+    # reading keyword
+    rPtr = lPtr
+    while (rPtr < len(message)) and (message[rPtr] not in whitespaces):
+        rPtr += 1
+
+    # skipping whitespace
+    while (rPtr < len(message)) and (message[rPtr] in whitespaces):
+        rPtr += 1
+
+    return message[rPtr:]
