@@ -6,17 +6,20 @@ from auxiliary import *
 
 database = sqlite3.connect("sqlite.db")
 cursor = database.cursor()
+text_commands = __import__("text_commands").main()
+
+
+def error(text, e=""):
+    print("[ERROR]\t" + text + "\nError text: " + str(e) + "\n[Enter to finish]")
+    input()
+    exit(1)
+
+
+def info(text):
+    print("[INFO]\t" + text)
 
 
 def main(client):
-    def error(text, e=""):
-        print("[ERROR]\t" + text + "\nError text: " + str(e) + "\n[Enter to finish]")
-        input()
-        exit(1)
-
-    def info(text):
-        print("[INFO]\t" + text)
-
     @client.event
     async def on_message(ctx):
         if debug:
@@ -34,5 +37,7 @@ def main(client):
             # executing command
             _command = parseCommand(ctx)
             if debug:
-                await ctx.reply(f"Debug: executing your command (Text: \"{_command}\") {'with' if _superuser else 'without'} superuser rules")
-
+                await ctx.reply(
+                    f"Debug: executing your command (Text: \"{_command}\") {'with' if _superuser else 'without'} superuser rules")
+            if _command in text_commands:
+                await ctx.reply(text_commands[_command](ctx))
