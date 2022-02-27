@@ -7,6 +7,7 @@ from auxiliary import *
 database = sqlite3.connect("sqlite.db")
 cursor = database.cursor()
 text_commands = __import__("text_commands").main()
+modules = __import__("bot_modules").main()
 
 
 def error(text, e=""):
@@ -35,9 +36,11 @@ def main(client):
 
         if _message.startswith(_prefix) or _message.startswith(f"<@!{client.user.id}>"):
             # executing command
-            _command = parseCommand(ctx)
+            _command = parseCommand(ctx).lower()
             if debug:
                 await ctx.reply(
                     f"Debug: executing your command (Text: \"{_command}\") {'with' if _superuser else 'without'} superuser rules")
             if _command in text_commands:
                 await ctx.reply(text_commands[_command](ctx))
+            if _command in modules:
+                await modules[_command](ctx)
