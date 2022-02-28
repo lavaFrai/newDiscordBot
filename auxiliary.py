@@ -12,7 +12,7 @@ def databaseGet(query):
     return cursor.fetchall()
 
 
-def prepareForDatabase(text: str):
+def prepareForDatabase(text: str) -> str:
     return text.replace('\\', '\\\\').replace('"', '\\"')
 
 
@@ -26,12 +26,12 @@ def registrateNewServer(id):
     pass
 
 
-def checkForSudo(ctx):
+def checkForSudo(ctx) -> bool:
     return ctx.author.id in eval(str(databaseGet(f"SELECT admin FROM servers WHERE id=\"{ctx.guild.id}\"")[0][0])) or \
            ctx.guild.owner_id == ctx.author.id
 
 
-def getServerPrefix(ctx):
+def getServerPrefix(ctx) -> str:
     _prefix = databaseGet(f"SELECT prefix FROM servers WHERE id=\"{ctx.guild.id}\"")
     if len(_prefix) > 0:
         _prefix = _prefix[0][0]
@@ -42,7 +42,7 @@ def getServerPrefix(ctx):
     return _prefix
 
 
-def parseCommand(ctx):
+def parseCommand(ctx) -> str:
     message = str(ctx.content)
     lPtr = 0
     _prefix = getServerPrefix(ctx)
@@ -67,7 +67,7 @@ def parseCommand(ctx):
     return message[lPtr:rPtr]
 
 
-def getRealMessageText(ctx):
+def getRealMessageText(ctx) -> str:
     message = str(ctx.content)
     lPtr = 0
     _prefix = getServerPrefix(ctx)
@@ -94,3 +94,21 @@ def getRealMessageText(ctx):
         rPtr += 1
 
     return message[rPtr:]
+
+
+def getFirstPing(ctx) -> discord.Member:
+    message = str(ctx.content)
+    _prefix = getServerPrefix(ctx)
+
+    if message.startswith(_prefix):
+        return ctx.mentions[0] if len(ctx.mentions) > 0 else None
+    else:
+        return ctx.mentions[1] if len(ctx.mentions) > 0 else None
+
+
+async def getUserById(ctx, id):
+    try:
+        print(await ctx.guild.fetch_member(int(id)))
+        return ""
+    except BaseException:
+        return None
