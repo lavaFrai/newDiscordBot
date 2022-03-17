@@ -33,12 +33,12 @@ def main():
 
     @bot_module
     async def debuginfo(ctx):
-        await ctx.reply(embed=Embed(title="Debug information", description=f"Server id: `{ctx.guild.id}` \n"
-                                                                           f"Channel id: `{ctx.channel.id}` \n"
-                                                                           f"Author id: `{ctx.author.id}`"
-                                                                           f"Superuser rules: `{checkForSudo(ctx)}` \n"
-                                                                           f"Message real content: `{getRealMessageText(ctx)}` \n"
-                                                                           f"Server prefix: `{getServerPrefix(ctx)}` \n"))
+        await ctx.reply(embed=Embed(title="Debug information", description=f"Server id: ` {ctx.guild.id}  ` \n"
+                                                                           f"Channel id: ` {ctx.channel.id}  ` \n"
+                                                                           f"Author id: ` {ctx.author.id}  ` \n"
+                                                                           f"Superuser rules: ` {checkForSudo(ctx)} ` \n"
+                                                                           f"Message real content: ` {getRealMessageText(ctx)} ` \n"
+                                                                           f"Server prefix: ` {getServerPrefix(ctx)} ` \n"))
 
     @bot_module
     async def admin_add(ctx):
