@@ -113,7 +113,7 @@ def main():
         except subprocess.TimeoutExpired as e:
             executor.kill()
             outs, errs = executor.communicate()
-            print("Timeout")
+            # print("Timeout")
             outs = b"ERROR\0calculation timeout"
         # print(errs)
         status = outs[:outs.decode(encoding='utf8').index('\0')]
@@ -130,6 +130,6 @@ def main():
                                                                                            f"Error: \n"
                                                                                            f"```python\n{out.decode(encoding='utf8')} ``` \n"))
 
-        print(expression, result)
+        # print(expression, result)
 
     return commands
