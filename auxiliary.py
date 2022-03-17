@@ -104,11 +104,3 @@ def getFirstPing(ctx) -> discord.Member:
         return ctx.mentions[0] if len(ctx.mentions) > 0 else None
     else:
         return ctx.mentions[1] if len(ctx.mentions) > 0 else None
-
-
-async def getUserById(ctx, id):
-    try:
-        print(await ctx.guild.fetch_member(int(id)))
-        return ""
-    except BaseException:
-        return None
