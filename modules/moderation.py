@@ -46,9 +46,10 @@ def main():
         try:
             request = getMemberWarns(getFirstPing(ctx))
             if len(request) > 0:
-                await ctx.reply(embed=Embed(title=f"Warnings of {getFirstPing(ctx).name}", description=f"{getFirstPing(ctx).name} has {len(request)} warnings```\n" +
-                                                                                                       '\n'.join(list(map(lambda x: f"Warning of {getFirstPing(ctx)} id: {str(x[4])}", request))) +
-                                                                                                       f" ```\nto remove warning type:\n{getServerPrefix(ctx)}unwarn <@{getFirstPing(ctx).id}> <warn id>"))
+                await ctx.reply(embed=Embed(title=f"Warnings of {getFirstPing(ctx).name}",
+                                            description=f"{getFirstPing(ctx).name} has {len(request)} warnings```\n" +
+                                            '\n'.join(list(map(lambda x: f"Warning of {getFirstPing(ctx)} id: {str(x[4])}", request))) +
+                                            f" ```\nto remove warning type:\n{getServerPrefix(ctx)}unwarn <@{getFirstPing(ctx).id}> <warn id>"))
             else:
                 await ctx.reply(embed=Embed(title=f"Warnings of {getFirstPing(ctx).name}", description=f"{getFirstPing(ctx).name} has not warnings"))
         except discord.errors.Forbidden:
