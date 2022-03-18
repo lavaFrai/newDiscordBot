@@ -7,6 +7,15 @@ database = sqlite3.connect("sqlite.db")
 cursor = database.cursor()
 
 
+def mergeDict(dict1, dict2):
+    for k, v in dict2.items():
+        if dict1.get(k):
+            dict1[k] = [dict1[k], v]
+        else:
+            dict1[k] = v
+    return dict1
+
+
 def databaseGet(query):
     cursor.execute(query)
     return cursor.fetchall()

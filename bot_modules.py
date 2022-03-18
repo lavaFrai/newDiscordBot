@@ -1,5 +1,8 @@
 import queue
 import subprocess
+
+import requests
+
 from auxiliary import *
 from discord import Embed
 import time
@@ -119,7 +122,7 @@ def main():
         status = outs[:outs.decode(encoding='utf8').index('\0')]
         out = outs[outs.decode(encoding='utf8').index('\0') + 1:]
         # print(status, out)
-        if status == 'OK':
+        if status == b'OK':
             await ctx.reply(embed=Embed(title="Execution result of expression", description=f"Expression: \n"
                                                                                             f"```python\n{expression} ``` \n"
                                                                                             f"Result: \n"
@@ -131,5 +134,33 @@ def main():
                                                                                            f"```python\n{out.decode(encoding='utf8')} ``` \n"))
 
         # print(expression, result)
+
+    @bot_module
+    async def hentai(ctx):
+        possible = [
+            'feet', 'yuri', 'trap', 'futanari', 'hololewd', 'lewdkemo',
+            'solog', 'feetg', 'cum', 'erokemo', 'les', 'wallpaper', 'lewdk',
+            'ngif', 'tickle', 'lewd', 'feed', 'gecg', 'eroyuri', 'eron',
+            'cum_jpg', 'bj', 'nsfw_neko_gif', 'solo', 'kemonomimi', 'nsfw_avatar',
+            'gasm', 'poke', 'anal', 'slap', 'hentai', 'avatar', 'erofeet', 'holo',
+            'keta', 'blowjob', 'pussy', 'tits', 'holoero', 'lizard', 'pussy_jpg',
+            'pwankg', 'classic', 'kuni', 'waifu', 'pat', '8ball', 'kiss', 'femdom',
+            'neko', 'spank', 'cuddle', 'erok', 'fox_girl', 'boobs', 'random_hentai_gif',
+            'smallboobs', 'hug', 'ero', 'smug', 'goose', 'baka', 'woof'
+        ]
+
+        if not ctx.channel.is_nsfw():
+            await ctx.reply(embed=Embed(title="Hentai", description=f"Sorry, i can't send that in this channel, it is not NSFW channel"))
+        elif len(getRealMessageText(ctx).strip()) == 0:
+            uri = requests.get("https://nekos.life/api/v2/img/Random_hentai_gif")
+            await ctx.reply(eval(str(uri.content.decode('utf8')))['url'])
+        else:
+            if getRealMessageText(ctx).strip() in possible:
+                uri = requests.get("https://nekos.life/api/v2/img/" + getRealMessageText(ctx).strip())
+                await ctx.reply(eval(str(uri.content.decode('utf8')))['url'])
+            else:
+                print(getRealMessageText(ctx).strip())
+                await ctx.reply(embed=Embed(title="Hentai", description=f"Category must be one of this list: \n```" + '\n'.join(possible) + "```"))
+
 
     return commands

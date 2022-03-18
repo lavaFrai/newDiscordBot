@@ -4,10 +4,8 @@ import time
 from consts import *
 from auxiliary import *
 
-database = sqlite3.connect("sqlite.db")
-cursor = database.cursor()
-text_commands = __import__("text_commands").main()
-modules = __import__("bot_modules").main()
+global modules
+modules = {}
 
 
 def error(text, e=""):
@@ -18,6 +16,24 @@ def error(text, e=""):
 
 def info(text):
     print("[INFO]\t" + text)
+
+
+def registrateModulesFile(path):
+    global modules
+    try:
+        modules = mergeDict(__import__(path).main(), modules)
+    except ImportError as e:
+        error(f"Can not import module '{path}' may be try without .py at end of name&", e)
+
+
+database = sqlite3.connect("sqlite.db")
+cursor = database.cursor()
+text_commands = __import__("text_commands").main()
+
+# Extension modules registration
+registrateModulesFile("bot_modules")
+# for example:
+registrateModulesFile("example_modules_file")
 
 
 def main(client):
