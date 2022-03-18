@@ -1,8 +1,12 @@
+import os
+
 import discord
 import sqlite3
 import time
 from consts import *
 from auxiliary import *
+import importlib.util
+import sys
 
 global modules
 modules = {}
@@ -18,8 +22,21 @@ def info(text):
     print("[INFO]\t" + text)
 
 
+def registrateModulesDirectory(moduleDir):
+    sys.path.append(moduleDir)
+
+
 def registrateModulesFile(path):
     global modules
+    try:
+        modules = mergeDict(__import__(path).main(), modules)
+    except ImportError as e:
+        error(f"Can not import module '{path}' may be try without .py at end of name&", e)
+
+
+def registrateModulesFileFromDirectory(moduleDir, path):
+    global modules
+    sys.path.append(moduleDir)
     try:
         modules = mergeDict(__import__(path).main(), modules)
     except ImportError as e:
@@ -31,9 +48,10 @@ cursor = database.cursor()
 text_commands = __import__("text_commands").main()
 
 # Extension modules registration
+registrateModulesDirectory("modules")
 registrateModulesFile("bot_modules")
-# for example:
-registrateModulesFile("example_modules_file")
+registrateModulesFile("moderation")
+# for example: registrateModulesFile("example_modules_file")
 
 
 def main(client):

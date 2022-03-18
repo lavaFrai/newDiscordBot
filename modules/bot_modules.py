@@ -1,13 +1,7 @@
-import queue
 import subprocess
-
 import requests
-
 from auxiliary import *
 from discord import Embed
-import time
-import threading
-import sys
 
 
 def info(text):

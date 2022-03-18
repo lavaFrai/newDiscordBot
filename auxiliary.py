@@ -113,3 +113,20 @@ def getFirstPing(ctx) -> discord.Member:
         return ctx.mentions[0] if len(ctx.mentions) > 0 else None
     else:
         return ctx.mentions[1] if len(ctx.mentions) > 0 else None
+
+
+def warnMember(member: discord.Member):
+    databaseSend(f'INSERT INTO warnings VALUES ("{member.guild.id}", "{member.id}", {1}, {0})')
+
+
+def getMemberWarns(member: discord.Member):
+    return databaseGet(f'SELECT *, ROWID FROM warnings WHERE server="{member.guild.id}" and user="{member.id}" and status=1')
+
+
+def dewarnMember(member: discord.Member, id: int) -> bool:
+    if (databaseGet(f"SELECT server FROM warnings WHERE ROWID={id}")[0][0] == member.guild.id) and (databaseGet(f"SELECT status FROM warnings WHERE ROWID={id}")[0][0] != 0):
+        databaseSend(f'UPDATE warnings SET status=0 WHERE ROWID={id}')
+        return True
+    else:
+        return False
+
